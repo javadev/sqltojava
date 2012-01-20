@@ -1,7 +1,19 @@
 /*
  * $Id$
  *
- * Copyright (c) 2011, 2012 (javadev75@gmail.com)
+ * Copyright 2012 Valentyn Kolesnikov
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.github.sqltojava;
 
@@ -9,28 +21,26 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
-import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.velocity.Template;
@@ -204,9 +214,9 @@ getLog().log(Level.INFO, "Generate tables: " + getKeys(tables));
                     if (foreignKey.matches()) {
                         for (Map<String, String> item : columns.get(tableName)) {
                             if (item.get("name").equals(foreignKey.group(1))) {
-                                item.put("name", foreignKey.group(1).replaceFirst("(\\w+)_.*" ,"$1").toLowerCase());
-                                String type = foreignKey.group(1).replaceFirst("(\\w+)_.*" ,"$1");
-                                type = type.substring(0,1).toUpperCase() + type.substring(1);
+                                item.put("name", foreignKey.group(1).replaceFirst("(\\w+)_.*" , "$1").toLowerCase());
+                                String type = foreignKey.group(1).replaceFirst("(\\w+)_.*" , "$1");
+                                type = type.substring(0, 1).toUpperCase() + type.substring(1);
                                 item.put("type", type);
                                 item.put("annotation0", "ManyToOne");
                                 item.put("annotation1", "NotNull");
@@ -275,7 +285,7 @@ getLog().log(Level.INFO, "Generate tables: " + getKeys(tables));
         item.put("type", "List<" + tableName2.substring(0, 1).toUpperCase()
             + tableName2.substring(1) + ">");
         item.put("annotation0", "ManyToMany");
-        item.put("annotation1", "JoinTable(name = \""+ tableName + "\",\n"
+        item.put("annotation1", "JoinTable(name = \"" + tableName + "\",\n"
         + "          joinColumns = @JoinColumn(name = \"" + tableName1 + "_id\"),\n"
         + "          inverseJoinColumns = @JoinColumn(name = \"" + tableName2 + "_id\"))");
         items.add(item);
@@ -343,7 +353,7 @@ getLog().log(Level.INFO, "Generate tables: " + getKeys(tables));
         }
     }
 
-    public static <T, E> Set<T> getKeys(Map<T, E> map) {
+    private <T, E> Set<T> getKeys(Map<T, E> map) {
         Set<T> keys = new LinkedHashSet<T>();
         for (Entry<T, E> entry : map.entrySet()) {
             keys.add(entry.getKey());
