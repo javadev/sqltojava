@@ -1,0 +1,132 @@
+/*
+ * $Id$
+ *
+ * Copyright (c) 2011, 2012 (javadev75@gmail.com)
+ */
+package $outPackage;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.FetchType;
+import javax.persistence.Lob;
+
+import javax.validation.constraints.Future;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
+import ${outPackage}.validator.*;
+
+/**
+ * Automatically generated.
+ *
+ * @author vko
+ * @version $Revision$ $Date$
+ */
+@Entity
+#if( $tableName )
+@Table(name = "$tableName")
+#end
+public class $className implements Serializable {
+
+    private static final long serialVersionUID =$columns.hashCode()L;
+#foreach ($column in $columns)
+#if( !$column.get("commentTable") )
+#set($name = $column.get("name"))
+#set($type = $column.get("type"))
+#if( $type == 'BIGINT')#evaluate('#set($type="Long")')#end
+#if( $type == 'INT')#evaluate('#set($type="Integer")')#end
+#if( $type == 'DATETIME')#evaluate('#set($type="Date")')#end
+#if( $type == 'DATE')#evaluate('#set($type="Date")')#end
+#if( $type == 'BIT(1)')#evaluate('#set($type="Boolean")')#end
+#if( $type.startsWith('VARCHAR') )#evaluate('#set($type="String")')#end
+#if( $type.startsWith('DECIMAL') )#evaluate('#set($type="BigDecimal")')#end
+#if( $type.startsWith('BLOB') )#evaluate('#set($type="byte[]")')#end
+#set ($Name = $name.substring(0,1).toUpperCase() + $name.substring(1))
+#if( $column.get("comment") )
+    /** $column.get("comment"). */
+#end
+    private $type $name;
+#end
+#end
+
+#foreach ($column in $columns)
+#if( $column.get("commentTable") )
+$column.get("commentTable")
+#else
+#set($name = $column.get("name"))
+#set($type = $column.get("type"))
+#set($nullable = '')
+#set($length = '')
+#if( $column.get("nullable") == 'false')#evaluate('#set($nullable=", nullable = false")')#end
+#if( $column.get("length"))#evaluate('#set($length=", length = " + $column.get("length"))')#end
+#if( $type == 'BIGINT')#evaluate('#set($type="Long")')#end
+#if( $type == 'INT')#evaluate('#set($type="Integer")')#end
+#if( $type == 'DATETIME')#evaluate('#set($type="Date")')#end
+#if( $type == 'DATE')#evaluate('#set($type="Date")')#end
+#if( $type == 'BIT(1)')#evaluate('#set($type="Boolean")')#end
+#if( $type.startsWith('VARCHAR') )#evaluate('#set($type="String")')#end
+#if( $type.startsWith('DECIMAL') )#evaluate('#set($type="BigDecimal")')#end
+#if( $type.startsWith('BLOB') )#evaluate('#set($type="byte[]")')#end
+#set ($Name = $name.substring(0,1).toUpperCase() + $name.substring(1))
+#if( $column.get("annotation0") )
+    @$column.get("annotation0")
+#end
+#if( $column.get("annotation1") )
+    @$column.get("annotation1")
+#end
+#if( $column.get("annotation2") )
+    @$column.get("annotation2")
+#end
+#if( $column.get("annotation3") )
+    @$column.get("annotation3")
+#end
+#if( $column.get("annotation0")!='Transient' && $column.get("annotation0")!='ManyToMany' && $column.get("annotation0")!='ManyToOne')
+    @Column(name = "$name", columnDefinition = "$column.get("type")"$nullable$length)
+#end
+#if( $type == 'boolean')
+    public $type is$Name() {
+        return $name;
+    }
+#elseif( $type == 'byte[]')
+    @Lob
+    public $type get$Name() {
+        return $name;
+    }
+#else
+    public $type get$Name() {
+        return $name;
+    }
+#end
+
+    public void set$Name($type $name) {
+        this.$name = $name;
+    }
+
+#end
+#end
+    @Override
+    public String toString() {
+        return "$className@" + hashCode();
+    }
+}
