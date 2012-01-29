@@ -99,6 +99,7 @@ public class JavaGenerator {
         readLines();
         scanTables();
         scanColumns();
+        scanManyToOne();
         scanManyToMany();
         generateJava();
     }
@@ -168,6 +169,7 @@ getLog().log(Level.INFO, "Generate tables: " + getKeys(tables));
                 Matcher lineWithComment = COLUMN_WITH_COMMENT.matcher(line);
                 if (lineWithComment.matches()) {
                     Map<String, String> item = new TreeMap<String, String>();
+                    item.put("tableName", tableName);
                     item.put("name", lineWithComment.group(1));
                     item.put("type", lineWithComment.group(2));
                     if (item.get("type").toLowerCase().startsWith("varchar")) {
@@ -198,6 +200,7 @@ getLog().log(Level.INFO, "Generate tables: " + getKeys(tables));
                 Matcher lineWithoutComment = COLUMN_WITHOUT_COMMENT.matcher(line);
                 if (lineWithoutComment.matches()) {
                     Map<String, String> item = new TreeMap<String, String>();
+                    item.put("tableName", tableName);
                     item.put("name", lineWithoutComment.group(1));
                     item.put("type", lineWithoutComment.group(2));
                     if (item.get("type").toLowerCase().startsWith("varchar")) {
@@ -245,6 +248,24 @@ getLog().log(Level.INFO, "Generate tables: " + getKeys(tables));
         }
     }
 
+    private void scanManyToOne() {
+        Iterator<String> tableKey = tables.keySet().iterator();
+        while (tableKey.hasNext()) {
+            String tableName = tableKey.next();
+            for (Map<String, String> item : columns.get(tableName)) {
+                if ("ManyToOne".equals(item.get("annotation0"))) {
+getLog().log(Level.INFO, "ManyToOne found in " + tableName + " " + item);
+                     List<Map<String, String>> tableColumns = columns.get(item.get("name"));
+                     Map<String, String> newItem = new TreeMap<String, String>();
+                     newItem.put("name", tableName + "s");
+                     newItem.put("type", "List<" + tableName.substring(0,1).toUpperCase() + tableName.substring(1) + ">");
+                     newItem.put("annotation0", "OneToMany");
+                     tableColumns.add(newItem);
+                }
+            }
+        }
+    }
+
     private void scanManyToMany() {
         Iterator<String> tableKey = tables.keySet().iterator();
         while (tableKey.hasNext()) {
@@ -284,7 +305,7 @@ getLog().log(Level.INFO, "Generate tables: " + getKeys(tables));
         item.put("name", tableName2 + "s");
         item.put("type", "List<" + tableName2.substring(0, 1).toUpperCase()
             + tableName2.substring(1) + ">");
-        item.put("annotation0", "ManyToMany");
+        item.put("annotation0", "ManyToMany(cascade=CascadeType.ALL)");
         item.put("annotation1", "JoinTable(name = \"" + tableName + "\",\n"
         + "          joinColumns = @JoinColumn(name = \"" + tableName1 + "_id\"),\n"
         + "          inverseJoinColumns = @JoinColumn(name = \"" + tableName2 + "_id\"))");

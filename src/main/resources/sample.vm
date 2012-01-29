@@ -12,12 +12,14 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
@@ -101,7 +103,7 @@ $column.get("commentTable")
 #if( $column.get("annotation3") )
     @$column.get("annotation3")
 #end
-#if( $column.get("annotation0")!='Transient' && $column.get("annotation0")!='ManyToMany' && $column.get("annotation0")!='ManyToOne')
+#if( $column.get("annotation0")!='Transient' && !$column.get("annotation0").startsWith("ManyToMany") && $column.get("annotation0")!='ManyToOne' && $column.get("annotation0")!='OneToMany')
     @Column(name = "$name", columnDefinition = "$column.get("type")"$nullable$length)
 #end
 #if( $type == 'boolean')

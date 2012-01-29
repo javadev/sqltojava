@@ -8,7 +8,7 @@ USE `mydb` ;
 -- -----------------------------------------------------
 -- Table `mydb`.`User@Customer`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`User@Customer` (
+CREATE  TABLE IF NOT EXISTS `mydb`.`user` (
   `username` VARCHAR(15) NOT NULL COMMENT '@Id @Length(min = 5, max = 15)  @Pattern(regex = \"^\\\\w*$\", message = \"not a valid username\")' ,
   `password` VARCHAR(15) NOT NULL COMMENT '@NotNull @Length(min = 5, max = 15)' ,
   `name` VARCHAR(100) NOT NULL COMMENT '@NotNull @Length(max = 100)' ,
@@ -19,7 +19,7 @@ COMMENT = '    public User(String name, String password, String usernam' /* comm
 -- -----------------------------------------------------
 -- Table `mydb`.`Hotel`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`Hotel` (
+CREATE  TABLE IF NOT EXISTS `mydb`.`hotel` (
   `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '@Id @GeneratedValue' ,
   `name` VARCHAR(50) NOT NULL COMMENT '@Length(max = 50) @NotNull' ,
   `address` VARCHAR(100) NOT NULL COMMENT '@Length(max = 100) @NotNull' ,
@@ -34,7 +34,7 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`Hotel` (
 -- -----------------------------------------------------
 -- Table `mydb`.`Booking`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`Booking` (
+CREATE  TABLE IF NOT EXISTS `mydb`.`booking` (
   `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '@Id @GeneratedValue' ,
   `checkinDate` DATETIME NOT NULL COMMENT 'Checkin date @NotNull @Basic @Temporal(TemporalType.DATE)' ,
   `checkoutDate` DATETIME NOT NULL COMMENT 'Checkout date @Basic @Temporal(TemporalType.DATE) @NotNull' ,
