@@ -76,6 +76,12 @@ public class JavaGenerator {
     /** Instance logger */
     private Logger log;
 
+    /**
+     * Constructor.
+     * @param basedir the base dir
+     * @param files the files
+     * @param outPackage the out package
+     */
     public JavaGenerator(String basedir, List<String> files, String outPackage) {
         this.basedir = basedir;
         this.files = files;
@@ -87,6 +93,7 @@ public class JavaGenerator {
      * By default, return a <code>SystemStreamLog</code> logger.
      *
      * @see org.apache.maven.plugin.Mojo#getLog()
+     * @return the logger
      */
     public Logger getLog() {
         if (log == null) {
@@ -95,6 +102,9 @@ public class JavaGenerator {
         return log;
     }
 
+    /**
+     * Generates java files.
+     */
     public void generate() {
         readLines();
         scanTables();
@@ -183,8 +193,10 @@ getLog().log(Level.INFO, "Generate tables: " + getKeys(tables));
                     int index = 0;
                     boolean sizePresent = false;
                     if (lineWithComment.group(5).contains("@")) {
-                        for (String annotItem : lineWithComment.group(5).replaceAll("\\\\n", " ").replaceFirst("^.*?@", "").split(" @")) {
-                            item.put("annotation" + index, annotItem.replaceAll("\\\\\"", "\"").replaceAll("\\\\\\\\", "\\\\"));
+                        for (String annotItem : lineWithComment.group(5).replaceAll(
+                                "\\\\n", " ").replaceFirst("^.*?@", "").split(" @")) {
+                            item.put("annotation" + index, annotItem.replaceAll(
+                                    "\\\\\"", "\"").replaceAll("\\\\\\\\", "\\\\"));
                             if (!sizePresent) {
                                 sizePresent = annotItem.contains("Size");
                             }
@@ -254,11 +266,11 @@ getLog().log(Level.INFO, "Generate tables: " + getKeys(tables));
             String tableName = tableKey.next();
             for (Map<String, String> item : columns.get(tableName)) {
                 if ("ManyToOne".equals(item.get("annotation0"))) {
-getLog().log(Level.INFO, "ManyToOne found in " + tableName + " " + item);
                      List<Map<String, String>> tableColumns = columns.get(item.get("name"));
                      Map<String, String> newItem = new TreeMap<String, String>();
                      newItem.put("name", tableName + "s");
-                     newItem.put("type", "List<" + tableName.substring(0,1).toUpperCase() + tableName.substring(1) + ">");
+                     newItem.put("type", "List<" + tableName.substring(0, 1).toUpperCase()
+                             + tableName.substring(1) + ">");
                      newItem.put("annotation0", "OneToMany");
                      tableColumns.add(newItem);
                 }
