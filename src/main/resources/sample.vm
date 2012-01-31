@@ -103,7 +103,7 @@ $column.get("commentTable")
 #if( $column.get("annotation3") )
     @$column.get("annotation3")
 #end
-#if( $column.get("annotation0")!='Transient' && !$column.get("annotation0").startsWith("ManyToMany") && $column.get("annotation0")!='ManyToOne' && $column.get("annotation0")!='OneToMany')
+#if( $column.get("annotation0")!='Transient' && !$column.get("annotation0").startsWith("ManyToMany") && $column.get("annotation0")!='ManyToOne' && !$column.get("annotation0").startsWith("OneToMany"))
     @Column(name = "$name", columnDefinition = "$column.get("type")"$nullable$length)
 #end
 #if( $type == 'boolean')

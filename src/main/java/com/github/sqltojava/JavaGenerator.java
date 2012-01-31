@@ -234,7 +234,8 @@ getLog().log(Level.INFO, "Generate tables: " + getKeys(tables));
                                 type = type.substring(0, 1).toUpperCase() + type.substring(1);
                                 item.put("type", type);
                                 item.put("annotation0", "ManyToOne");
-                                item.put("annotation1", "NotNull");
+                                item.put("annotation1", "JoinColumn(name=\"" + item.get("name") + "_id\")");
+                                item.put("annotation2", "NotNull");
                             }
                         }
                     }
@@ -271,7 +272,7 @@ getLog().log(Level.INFO, "Generate tables: " + getKeys(tables));
                      newItem.put("name", tableName + "s");
                      newItem.put("type", "List<" + tableName.substring(0, 1).toUpperCase()
                              + tableName.substring(1) + ">");
-                     newItem.put("annotation0", "OneToMany");
+                     newItem.put("annotation0", "OneToMany(mappedBy=\"" + item.get("name") + "\")");
                      tableColumns.add(newItem);
                 }
             }
