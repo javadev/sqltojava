@@ -283,16 +283,14 @@ getLog().log(Level.INFO, "Generate tables: " + getKeys(tables));
         Iterator<String> tableKey = tables.keySet().iterator();
         while (tableKey.hasNext()) {
             String tableName = tableKey.next();
-            for (String line : tables.get(tableName)) {
-                if (tableName.contains("_has_")) {
-                    Matcher tableNameWithHas = TABLE_NAME_WITH_HAS.matcher(tableName);
-                    if (tableNameWithHas.matches()) {
-                        if (!fillManyToMany(tableName, tableNameWithHas.group(1), tableNameWithHas.group(2))) {
-                            continue;
-                        }
-                        if (!fillManyToMany(tableName, tableNameWithHas.group(2), tableNameWithHas.group(1))) {
-                            continue;
-                        }
+            if (tableName.contains("_has_")) {
+                Matcher tableNameWithHas = TABLE_NAME_WITH_HAS.matcher(tableName);
+                if (tableNameWithHas.matches()) {
+                    if (!fillManyToMany(tableName, tableNameWithHas.group(1), tableNameWithHas.group(2))) {
+                        continue;
+                    }
+                    if (!fillManyToMany(tableName, tableNameWithHas.group(2), tableNameWithHas.group(1))) {
+                        continue;
                     }
                 }
             }
