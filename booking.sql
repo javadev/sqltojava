@@ -42,7 +42,7 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`booking` (
   `creditCardName` VARCHAR(70) NOT NULL COMMENT 'Credit card name @NotNull(message = \"Credit card name is required\") @Length(min = 3, max = 70, message = \"Credit card name is required\")' ,
   `creditCardExpiryMonth` INT NOT NULL ,
   `creditCardExpiryYear` INT NOT NULL ,
-  `smoking` BIT NOT NULL ,
+  `smoking` BIT(1) NOT NULL ,
   `beds` INT NOT NULL ,
   `User_username` VARCHAR(15) NOT NULL ,
   `Hotel_id` BIGINT NOT NULL ,
