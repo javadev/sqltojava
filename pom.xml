@@ -154,5 +154,20 @@
       <version>4.3.1</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-module-junit4</artifactId>
+      <version>${powermock.version}</version>
+      <scope>test</scope>
+   </dependency>
+   <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-api-easymock</artifactId>
+      <version>${powermock.version}</version>
+      <scope>test</scope>
+   </dependency>
   </dependencies>
+  <properties>
+    <powermock.version>1.4.12</powermock.version>
+  </properties>
 </project>
