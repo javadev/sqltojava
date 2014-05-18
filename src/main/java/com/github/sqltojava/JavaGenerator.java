@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 Valentyn Kolesnikov
+ * Copyright 2014 Valentyn Kolesnikov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -362,7 +362,7 @@ getLog().log(Level.INFO, "Generate tables: " + getKeys(tables));
      * @param templatePath
      * @return
      */
-    private static Template getTemplate(final String templatePath) {
+    private Template getTemplate(final String templatePath) {
         if (!Velocity.resourceExists(templatePath)) {
             StringResourceRepository repo = StringResourceLoader.getRepository();
             repo.putStringResource(templatePath, getTemplateFromResource(templatePath));
@@ -376,7 +376,7 @@ getLog().log(Level.INFO, "Generate tables: " + getKeys(tables));
      * @param templatePath
      * @return
      */
-    private static String getTemplateFromResource(final String templatePath) {
+    private String getTemplateFromResource(final String templatePath) {
         try {
             InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(templatePath);
             return IOUtils.toString(stream, "UTF-8");
