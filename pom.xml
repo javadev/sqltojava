@@ -102,9 +102,11 @@
           <format>xml</format>
           <maxmem>256m</maxmem>
           <aggregate>true</aggregate>
-          <excludes>
-            <exclude>**/SqlToJava*.class</exclude>
-          </excludes>
+          <instrumentation>
+            <excludes>
+              <exclude>**/SqlToJava*.class</exclude>
+            </excludes>
+          </instrumentation>
         </configuration>
       </plugin>
       <plugin>
