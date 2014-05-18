@@ -16,6 +16,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.ManyToOne;
@@ -42,6 +43,8 @@ import sample.validator.*;
 /**
  * Automatically generated.
  *
+ * Таблица хранит заявки
+
  * @author vko
  * @version $Revision$ $Date$
  */
@@ -99,8 +102,6 @@ public class In_dossier implements Serializable {
     private List<In_good> in_goods;
     private List<In_person> in_persons;
     private List<In_third_person> in_third_persons;
-
-Таблица хранит заявки
 
     @Column(name = "amount_of_loan", columnDefinition = "DECIMAL(9,2)")
     public BigDecimal getAmount_of_loan() {

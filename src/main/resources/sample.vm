@@ -16,6 +16,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.ManyToOne;
@@ -42,12 +43,29 @@ import ${outPackage}.validator.*;
 /**
  * Automatically generated.
  *
+#foreach ($column in $columns)
+#if( $column.get("commentTable") )
+ * $column.get("commentTable")
+#end#end
  * @author vko
  * @version $Revision$ $Date$
  */
 @Entity
 #if( $tableName )
 @Table(name = "$tableName")
+#end
+#foreach ($column in $columns)
+#if( $column.get("commentTable") )
+#if( $column.get("annotation0") )
+@$column.get("annotation0")
+#end
+#if( $column.get("annotation1") )
+@$column.get("annotation1")
+#end
+#if( $column.get("annotation2") )
+@$column.get("annotation2")
+#end
+#end
 #end
 public class $className implements Serializable {
 
@@ -73,9 +91,7 @@ public class $className implements Serializable {
 #end
 
 #foreach ($column in $columns)
-#if( $column.get("commentTable") )
-$column.get("commentTable")
-#else
+#if( !$column.get("commentTable") )
 #set($name = $column.get("name"))
 #set($type = $column.get("type"))
 #set($nullable = '')
