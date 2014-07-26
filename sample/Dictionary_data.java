@@ -43,8 +43,6 @@ import sample.validator.*;
 /**
  * Automatically generated.
  *
- * Таблица хранит справочники\n
-
  * @author vko
  * @version $Revision$ $Date$
  */
@@ -52,7 +50,7 @@ import sample.validator.*;
 @Table(name = "dictionary_data")
 public class Dictionary_data implements Serializable {
 
-    private static final long serialVersionUID =-564810167L;
+    private static final long serialVersionUID =-110292415L;
     private String dkey;
     private String dvalue;
     private String expkey;
@@ -126,7 +124,7 @@ public class Dictionary_data implements Serializable {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "id", columnDefinition = "BIGINT", nullable = false)
     public Long getId() {
         return id;

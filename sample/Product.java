@@ -50,14 +50,14 @@ import sample.validator.*;
 @Table(name = "product")
 public class Product implements Serializable {
 
-    private static final long serialVersionUID =1951173890L;
+    private static final long serialVersionUID =1767450909L;
     private Long id;
     private String name;
     private List<In_dossier> in_dossiers;
     private List<Powerofattorney> powerofattorneys;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "id", columnDefinition = "BIGINT", nullable = false)
     public Long getId() {
         return id;

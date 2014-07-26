@@ -50,7 +50,7 @@ import sample.validator.*;
 @Table(name = "goodexternaldistributor")
 public class Goodexternaldistributor implements Serializable {
 
-    private static final long serialVersionUID =1444655529L;
+    private static final long serialVersionUID =2044396398L;
     private String dictionary_good;
     private Externaldistributor externaldistributor;
     private Long id;
@@ -77,7 +77,7 @@ public class Goodexternaldistributor implements Serializable {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "id", columnDefinition = "BIGINT", nullable = false)
     public Long getId() {
         return id;

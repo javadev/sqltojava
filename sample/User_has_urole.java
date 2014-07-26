@@ -50,13 +50,13 @@ import sample.validator.*;
 @Table(name = "user_has_urole")
 public class User_has_urole implements Serializable {
 
-    private static final long serialVersionUID =257962438L;
+    private static final long serialVersionUID =1083319883L;
     private Long id;
     private Long urole_id;
     private Long user_id;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "id", columnDefinition = "BIGINT", nullable = false)
     public Long getId() {
         return id;

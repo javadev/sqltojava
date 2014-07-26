@@ -50,7 +50,7 @@ import sample.validator.*;
 @Table(name = "in_asset")
 public class In_asset implements Serializable {
 
-    private static final long serialVersionUID =112211952L;
+    private static final long serialVersionUID =-71511029L;
     private Integer count_of;
     private String dictionary_asset;
     private Long id;
@@ -80,7 +80,7 @@ public class In_asset implements Serializable {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "id", columnDefinition = "BIGINT", nullable = false)
     public Long getId() {
         return id;

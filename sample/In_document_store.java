@@ -50,7 +50,7 @@ import sample.validator.*;
 @Table(name = "in_document_store")
 public class In_document_store implements Serializable {
 
-    private static final long serialVersionUID =-1044533736L;
+    private static final long serialVersionUID =-1228256717L;
     private byte[] data;
     private String description;
     private Long doc_size;
@@ -111,7 +111,7 @@ public class In_document_store implements Serializable {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "id", columnDefinition = "BIGINT", nullable = false)
     public Long getId() {
         return id;

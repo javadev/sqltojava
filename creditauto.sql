@@ -1,6 +1,6 @@
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci ;
 USE `mydb` ;
@@ -9,7 +9,7 @@ USE `mydb` ;
 -- Table `mydb`.`product`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `mydb`.`product` (
-  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue(strategy = GenerationType.IDENTITY)' ,
+  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue' ,
   `name` VARCHAR(100) NOT NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
@@ -19,7 +19,7 @@ ENGINE = InnoDB;
 -- Table `mydb`.`credittype`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `mydb`.`credittype` (
-  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue(strategy = GenerationType.IDENTITY)' ,
+  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue' ,
   `name` VARCHAR(100) NOT NULL ,
   `namescreen` VARCHAR(100) NULL ,
   `description` VARCHAR(500) NULL ,
@@ -48,7 +48,7 @@ ENGINE = InnoDB;
 -- Table `mydb`.`externaldistributor`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `mydb`.`externaldistributor` (
-  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue(strategy = GenerationType.IDENTITY)' ,
+  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue' ,
   `name` VARCHAR(100) NOT NULL COMMENT '@NotNull' ,
   `ext_id` VARCHAR(20) NOT NULL COMMENT '@NotNull' ,
   `province` VARCHAR(50) NULL COMMENT '@NotNull' ,
@@ -63,7 +63,7 @@ ENGINE = InnoDB;
 -- Table `mydb`.`in_dossier`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `mydb`.`in_dossier` (
-  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue(strategy = GenerationType.IDENTITY)' ,
+  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue' ,
   `core_amount_of_loan` DECIMAL(9,2) NULL ,
   `amount_of_loan` DECIMAL(9,2) NULL ,
   `total_price` DECIMAL(9,2) NULL COMMENT 'Цена всех товаров\n@NotNull' ,
@@ -99,9 +99,9 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`in_dossier` (
   `total_interest` DECIMAL(9,2) NULL ,
   `total_loan_cost` DECIMAL(9,2) NULL ,
   PRIMARY KEY (`id`) ,
-  INDEX `fk_in_dossier_product1` (`product_id` ASC) ,
-  INDEX `fk_in_dossier_credittype1` (`credittype_id` ASC) ,
-  INDEX `fk_in_dossier_externaldistributor1` (`externaldistributor_id` ASC) ,
+  INDEX `fk_in_dossier_product1_idx` (`product_id` ASC) ,
+  INDEX `fk_in_dossier_credittype1_idx` (`credittype_id` ASC) ,
+  INDEX `fk_in_dossier_externaldistributor1_idx` (`externaldistributor_id` ASC) ,
   CONSTRAINT `fk_in_dossier_product1`
     FOREIGN KEY (`product_id` )
     REFERENCES `mydb`.`product` (`id` )
@@ -118,16 +118,14 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`in_dossier` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = '
-Таблица хранит заявки
-';
-@org.hibernate.annotations.Table(\n   appliesTo = "in_dossier",\n   indexes = {\n      @org.hibernate.annotations.Index(name="date_of_entering_dossier_index", columnNames = {"date_of_entering_dossier"})\n   }\n)\n
+COMMENT = 'Таблица хранит заявки@org.hibernate.annotations.Table(\\n   a /* comment truncated */ /*ppliesTo = "in_dossier",\n   indexes = {\n      @org.hibernate.annotations.Index(name="date_of_entering_dossier_index", columnNames = {"date_of_entering_dossier"})\n   }\n)\n*/';
+
 
 -- -----------------------------------------------------
 -- Table `mydb`.`in_person`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `mydb`.`in_person` (
-  `id` BIGINT NOT NULL COMMENT '@Id\n@GeneratedValue(strategy = GenerationType.IDENTITY)' ,
+  `id` BIGINT NOT NULL COMMENT '@Id\n@GeneratedValue' ,
   `dictionary_gender` VARCHAR(5) NULL COMMENT '@NotNull' ,
   `tin` VARCHAR(10) NULL COMMENT '@NotNull\n@Tin\n@CheckSum' ,
   `date_of_issue_tin_certificate` DATE NULL COMMENT '@NotNull\n@UkrainianDate' ,
@@ -166,7 +164,7 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`in_person` (
   `dictionary_mailprovince` VARCHAR(5) NULL COMMENT 'Область\n@NotNull' ,
   `number_of_children` INT NULL COMMENT 'Количество человек на содержании, в том числе несовершеннолетние дети\n@NotNull\n@Min(value = 0)\n@Max(value = 10)' ,
   `dictionary_habitation_situation` VARCHAR(5) NULL COMMENT 'Ситуация с жильем и местом жительства' ,
-  `habit_situation_start_date` DATE NULL COMMENT 'С какого времени ситуация с жильем\n@NotNull\n@Year(min = "1950")' ,
+  `habit_situation_start_date` DATE NULL COMMENT 'С какого времени ситуация с жильем\n@NotNull\n' ,
   `dictionary_marital_status` VARCHAR(5) NULL COMMENT '@NotNull' ,
   `dict_type_of_income_doc` VARCHAR(5) NULL ,
   `gross_income` DECIMAL(9,2) NULL ,
@@ -213,7 +211,7 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`in_person` (
   `last_name_ru` VARCHAR(60) NULL COMMENT '@NotNull\n@CyrilicSymbols' ,
   `patronymic_name_ru` VARCHAR(60) NULL ,
   PRIMARY KEY (`in_dossier_id`, `id`) ,
-  INDEX `fk_in_preson_in_dossier1` (`in_dossier_id` ASC) ,
+  INDEX `fk_in_preson_in_dossier1_idx` (`in_dossier_id` ASC) ,
   CONSTRAINT `fk_in_preson_in_dossier1`
     FOREIGN KEY (`in_dossier_id` )
     REFERENCES `mydb`.`in_dossier` (`id` )
@@ -226,8 +224,8 @@ ENGINE = InnoDB;
 -- Table `mydb`.`in_good`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `mydb`.`in_good` (
-  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue(strategy = GenerationType.IDENTITY)' ,
-  `price` DECIMAL(9,2) NULL COMMENT '@NotNull @Check(min = 10000, max = 500000)' ,
+  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue' ,
+  `price` DECIMAL(9,2) NULL COMMENT '@NotNull' ,
   `production_date` DATE NULL ,
   `retailer_good_name` VARCHAR(100) NULL ,
   `number` INT NULL ,
@@ -235,7 +233,7 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`in_good` (
   `dictionary_carBrand` VARCHAR(5) NULL COMMENT '@NotNull\n' ,
   `dictionary_carModel` VARCHAR(5) NULL COMMENT '@NotNull' ,
   `car_body_number` VARCHAR(17) NULL COMMENT '@Vin @NotNull' ,
-  `car_issue_year` INT NULL COMMENT '@NotNull @IssueYear' ,
+  `car_issue_year` INT NULL COMMENT '@NotNull\n@Min(value = 1950)\n@Max(value = 2012)' ,
   `car_engine_volume` INT NULL COMMENT '@NotNull' ,
   `dict_car_transmission_type` VARCHAR(5) NULL ,
   `dict_car_body_type` VARCHAR(5) NULL COMMENT '@NotNull' ,
@@ -246,7 +244,7 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`in_good` (
   `car_delivery_date` DATE NULL ,
   `car_driving_license_ownership` VARCHAR(5) NULL ,
   PRIMARY KEY (`id`, `in_dossier_id`) ,
-  INDEX `fk_in_good_in_dossier1` (`in_dossier_id` ASC) ,
+  INDEX `fk_in_good_in_dossier1_idx` (`in_dossier_id` ASC) ,
   CONSTRAINT `fk_in_good_in_dossier1`
     FOREIGN KEY (`in_dossier_id` )
     REFERENCES `mydb`.`in_dossier` (`id` )
@@ -259,7 +257,7 @@ ENGINE = InnoDB;
 -- Table `mydb`.`user`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `mydb`.`user` (
-  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue(strategy = GenerationType.IDENTITY)' ,
+  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue' ,
   `login` VARCHAR(15) NOT NULL COMMENT '@NotNull' ,
   `password` VARCHAR(15) NOT NULL COMMENT '@NotNull @Size(min = 5, max = 15)' ,
   `name` VARCHAR(100) NOT NULL COMMENT '@NotNull @Size(max = 100)' ,
@@ -290,12 +288,12 @@ COMMENT = 'Таблица хранит пользователей системы
 -- Table `mydb`.`credittype_has_externaldistributor`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `mydb`.`credittype_has_externaldistributor` (
-  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue(strategy = GenerationType.IDENTITY)' ,
+  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue' ,
   `credittype_id` BIGINT NOT NULL ,
   `externaldistributor_id` BIGINT NOT NULL ,
   PRIMARY KEY (`id`) ,
-  INDEX `fk_credittype_has_externaldistributor_credittype1` (`credittype_id` ASC) ,
-  INDEX `fk_credittype_has_externaldistributor_externaldistributor1` (`externaldistributor_id` ASC) ,
+  INDEX `fk_credittype_has_externaldistributor_credittype1_idx` (`credittype_id` ASC) ,
+  INDEX `fk_credittype_has_externaldistributor_externaldistributor1_idx` (`externaldistributor_id` ASC) ,
   CONSTRAINT `fk_credittype_has_externaldistributor_credittype1`
     FOREIGN KEY (`credittype_id` )
     REFERENCES `mydb`.`credittype` (`id` )
@@ -313,13 +311,13 @@ ENGINE = InnoDB;
 -- Table `mydb`.`user_has_externaldistributor`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `mydb`.`user_has_externaldistributor` (
-  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue(strategy = GenerationType.IDENTITY)' ,
+  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue' ,
   `user_id` BIGINT NOT NULL ,
   `externaldistributor_id` BIGINT NOT NULL ,
   `active` BIT(1) NULL ,
   PRIMARY KEY (`id`) ,
-  INDEX `fk_user_has_externaldistributor_user1` (`user_id` ASC) ,
-  INDEX `fk_user_has_externaldistributor_externaldistributor1` (`externaldistributor_id` ASC) ,
+  INDEX `fk_user_has_externaldistributor_user1_idx` (`user_id` ASC) ,
+  INDEX `fk_user_has_externaldistributor_externaldistributor1_idx` (`externaldistributor_id` ASC) ,
   CONSTRAINT `fk_user_has_externaldistributor_user1`
     FOREIGN KEY (`user_id` )
     REFERENCES `mydb`.`user` (`id` )
@@ -337,7 +335,7 @@ ENGINE = InnoDB;
 -- Table `mydb`.`dictionary_data`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `mydb`.`dictionary_data` (
-  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue(strategy = GenerationType.IDENTITY)' ,
+  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue' ,
   `language` VARCHAR(30) NULL ,
   `valid` BIT(1) NOT NULL ,
   `fromdate` DATETIME NULL ,
@@ -351,20 +349,18 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`dictionary_data` (
   `expkey3` VARCHAR(50) NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB
-COMMENT = '
-Таблица хранит справочники\n
-';
-@org.hibernate.annotations.Table(\n   appliesTo = "dictionary_data",\n   indexes = {\n      @org.hibernate.annotations.Index(name="name_valid_from_to_language_index", columnNames = {"name", "valid", "fromdate", "todate", "language"}),\n      @org.hibernate.annotations.Index(name="dvalue_index", columnNames = {"dvalue"})\n   }\n)\n
+COMMENT = 'Таблица хранит справочники\\n@org.hibernate.annotations.Table /* comment truncated */ /*(\n   appliesTo = "dictionary_data",\n   indexes = {\n      @org.hibernate.annotations.Index(name="name_valid_from_to_language_index", columnNames = {"name", "valid", "fromdate", "todate", "language"}),\n      @org.hibernate.annotations.Index(name="dvalue_index", columnNames = {"dvalue"})\n   }\n)\n*/';
+
 
 -- -----------------------------------------------------
 -- Table `mydb`.`goodexternaldistributor`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `mydb`.`goodexternaldistributor` (
-  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue(strategy = GenerationType.IDENTITY)' ,
+  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue' ,
   `dictionary_good` VARCHAR(30) NOT NULL ,
   `externaldistributor_id` BIGINT NOT NULL ,
   PRIMARY KEY (`id`, `externaldistributor_id`) ,
-  INDEX `fk_goodexternaldistributor_externaldistributor1` (`externaldistributor_id` ASC) ,
+  INDEX `fk_goodexternaldistributor_externaldistributor1_idx` (`externaldistributor_id` ASC) ,
   CONSTRAINT `fk_goodexternaldistributor_externaldistributor1`
     FOREIGN KEY (`externaldistributor_id` )
     REFERENCES `mydb`.`externaldistributor` (`id` )
@@ -394,7 +390,7 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`urole` (
   `is_allowed_make_decision` BIT(1) NULL ,
   `competence_level_id` BIGINT NOT NULL ,
   PRIMARY KEY (`id`) ,
-  INDEX `fk_role_competence_level1` (`competence_level_id` ASC) ,
+  INDEX `fk_role_competence_level1_idx` (`competence_level_id` ASC) ,
   CONSTRAINT `fk_role_competence_level1`
     FOREIGN KEY (`competence_level_id` )
     REFERENCES `mydb`.`competence_level` (`id` )
@@ -422,7 +418,7 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`uright` (
   `description` VARCHAR(256) NULL ,
   `rgroup_id` BIGINT NOT NULL ,
   PRIMARY KEY (`id`) ,
-  INDEX `fk_uright_ugroup1` (`rgroup_id` ASC) ,
+  INDEX `fk_uright_ugroup1_idx` (`rgroup_id` ASC) ,
   CONSTRAINT `fk_uright_ugroup1`
     FOREIGN KEY (`rgroup_id` )
     REFERENCES `mydb`.`rgroup` (`id` )
@@ -437,9 +433,9 @@ ENGINE = InnoDB;
 CREATE  TABLE IF NOT EXISTS `mydb`.`user_has_urole` (
   `user_id` BIGINT NOT NULL ,
   `urole_id` BIGINT NOT NULL ,
-  `id` BIGINT NOT NULL COMMENT '@Id\n@GeneratedValue(strategy = GenerationType.IDENTITY)' ,
-  INDEX `fk_user_has_urole_urole1` (`urole_id` ASC) ,
-  INDEX `fk_user_has_urole_user1` (`user_id` ASC) ,
+  `id` BIGINT NOT NULL COMMENT '@Id\n@GeneratedValue' ,
+  INDEX `fk_user_has_urole_urole1_idx` (`urole_id` ASC) ,
+  INDEX `fk_user_has_urole_user1_idx` (`user_id` ASC) ,
   PRIMARY KEY (`id`) ,
   CONSTRAINT `fk_user_has_urole_user1`
     FOREIGN KEY (`user_id` )
@@ -462,8 +458,8 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`urole_has_uright` (
   `uright_id` BIGINT NOT NULL ,
   `id` BIGINT NOT NULL COMMENT '@Id' ,
   PRIMARY KEY (`id`) ,
-  INDEX `fk_urole_has_uright_uright1` (`uright_id` ASC) ,
-  INDEX `fk_urole_has_uright_urole1` (`urole_id` ASC) ,
+  INDEX `fk_urole_has_uright_uright1_idx` (`uright_id` ASC) ,
+  INDEX `fk_urole_has_uright_urole1_idx` (`urole_id` ASC) ,
   CONSTRAINT `fk_urole_has_uright_urole1`
     FOREIGN KEY (`urole_id` )
     REFERENCES `mydb`.`urole` (`id` )
@@ -481,7 +477,7 @@ ENGINE = InnoDB;
 -- Table `mydb`.`in_third_person`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `mydb`.`in_third_person` (
-  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue(strategy = GenerationType.IDENTITY)' ,
+  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue' ,
   `in_dossier_id` BIGINT NOT NULL ,
   `first_name` VARCHAR(60) NULL ,
   `last_name` VARCHAR(60) NULL ,
@@ -489,7 +485,7 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`in_third_person` (
   `phone` VARCHAR(10) NULL ,
   `dict_type_of_relation_client` VARCHAR(5) NULL ,
   PRIMARY KEY (`id`) ,
-  INDEX `fk_In_third_person_in_dossier1` (`in_dossier_id` ASC) ,
+  INDEX `fk_In_third_person_in_dossier1_idx` (`in_dossier_id` ASC) ,
   CONSTRAINT `fk_In_third_person_in_dossier1`
     FOREIGN KEY (`in_dossier_id` )
     REFERENCES `mydb`.`in_dossier` (`id` )
@@ -502,7 +498,7 @@ ENGINE = InnoDB;
 -- Table `mydb`.`in_document_store`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `mydb`.`in_document_store` (
-  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue(strategy = GenerationType.IDENTITY)' ,
+  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue' ,
   `data` BLOB NULL ,
   `doc_size` BIGINT NULL ,
   `doc_type` VARCHAR(45) NULL ,
@@ -512,7 +508,7 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`in_document_store` (
   `is_not_required` BIT(1) NULL ,
   `filename` VARCHAR(45) NULL ,
   PRIMARY KEY (`id`) ,
-  INDEX `fk_in_document_store_in_dossier1` (`in_dossier_id` ASC) ,
+  INDEX `fk_in_document_store_in_dossier1_idx` (`in_dossier_id` ASC) ,
   CONSTRAINT `fk_in_document_store_in_dossier1`
     FOREIGN KEY (`in_dossier_id` )
     REFERENCES `mydb`.`in_dossier` (`id` )
@@ -525,14 +521,14 @@ ENGINE = InnoDB;
 -- Table `mydb`.`in_asset`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `mydb`.`in_asset` (
-  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue(strategy = GenerationType.IDENTITY)' ,
+  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue' ,
   `count_of` INT NULL COMMENT '@NotNull' ,
   `dictionary_asset` VARCHAR(5) NULL COMMENT '@NotNull' ,
   `in_dossier_id` BIGINT NOT NULL ,
   `selected` BIT(1) NULL COMMENT '@Transient' ,
   `visible` BIT(1) NULL COMMENT '@Transient' ,
   PRIMARY KEY (`id`) ,
-  INDEX `fk_in_asset_in_dossier1` (`in_dossier_id` ASC) ,
+  INDEX `fk_in_asset_in_dossier1_idx` (`in_dossier_id` ASC) ,
   CONSTRAINT `fk_in_asset_in_dossier1`
     FOREIGN KEY (`in_dossier_id` )
     REFERENCES `mydb`.`in_dossier` (`id` )
@@ -545,7 +541,7 @@ ENGINE = InnoDB;
 -- Table `mydb`.`powerofattorney`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `mydb`.`powerofattorney` (
-  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue(strategy = GenerationType.IDENTITY)' ,
+  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue' ,
   `attorney_date_start` DATE NULL ,
   `attorney_date_finish` DATE NULL COMMENT '@Future' ,
   `dictionary_type_of_attorney` VARCHAR(5) NULL ,
@@ -555,9 +551,9 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`powerofattorney` (
   `product_id` BIGINT NOT NULL ,
   `externaldistributor_id` BIGINT NULL ,
   PRIMARY KEY (`id`) ,
-  INDEX `fk_powerofattorney_user1` (`user_id` ASC) ,
-  INDEX `fk_powerofattorney_product1` (`product_id` ASC) ,
-  INDEX `fk_powerofattorney_externaldistributor1` (`externaldistributor_id` ASC) ,
+  INDEX `fk_powerofattorney_user1_idx` (`user_id` ASC) ,
+  INDEX `fk_powerofattorney_product1_idx` (`product_id` ASC) ,
+  INDEX `fk_powerofattorney_externaldistributor1_idx` (`externaldistributor_id` ASC) ,
   CONSTRAINT `fk_powerofattorney_user1`
     FOREIGN KEY (`user_id` )
     REFERENCES `mydb`.`user` (`id` )
@@ -580,7 +576,7 @@ ENGINE = InnoDB;
 -- Table `mydb`.`in_bloknot`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `mydb`.`in_bloknot` (
-  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue(strategy = GenerationType.IDENTITY)' ,
+  `id` BIGINT NOT NULL COMMENT '@Id @GeneratedValue' ,
   `bloknot_type` VARCHAR(30) NULL ,
   `bloknot_subtype` VARCHAR(100) NULL ,
   `enter_date` DATETIME NULL ,
@@ -590,7 +586,7 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`in_bloknot` (
   `user_name` VARCHAR(128) NULL ,
   `in_dossier_id` BIGINT NOT NULL ,
   PRIMARY KEY (`id`) ,
-  INDEX `fk_in_bloknot_in_dossier1` (`in_dossier_id` ASC) ,
+  INDEX `fk_in_bloknot_in_dossier1_idx` (`in_dossier_id` ASC) ,
   CONSTRAINT `fk_in_bloknot_in_dossier1`
     FOREIGN KEY (`in_dossier_id` )
     REFERENCES `mydb`.`in_dossier` (`id` )
@@ -598,6 +594,7 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`in_bloknot` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+USE `mydb` ;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

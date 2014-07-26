@@ -43,8 +43,6 @@ import sample.validator.*;
 /**
  * Automatically generated.
  *
- * Таблица хранит заявки
-
  * @author vko
  * @version $Revision$ $Date$
  */
@@ -52,7 +50,7 @@ import sample.validator.*;
 @Table(name = "in_dossier")
 public class In_dossier implements Serializable {
 
-    private static final long serialVersionUID =1807929287L;
+    private static final long serialVersionUID =-1984822751L;
     private BigDecimal amount_of_loan;
     private BigDecimal annuity_sum;
     private BigDecimal core_amount_of_loan;
@@ -277,7 +275,7 @@ public class In_dossier implements Serializable {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "id", columnDefinition = "BIGINT", nullable = false)
     public Long getId() {
         return id;

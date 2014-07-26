@@ -50,7 +50,7 @@ import sample.validator.*;
 @Table(name = "in_third_person")
 public class In_third_person implements Serializable {
 
-    private static final long serialVersionUID =-979750292L;
+    private static final long serialVersionUID =1914771889L;
     private String dict_type_of_relation_client;
     private String first_name;
     private Long id;
@@ -80,7 +80,7 @@ public class In_third_person implements Serializable {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "id", columnDefinition = "BIGINT", nullable = false)
     public Long getId() {
         return id;

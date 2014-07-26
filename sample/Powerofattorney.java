@@ -50,7 +50,7 @@ import sample.validator.*;
 @Table(name = "powerofattorney")
 public class Powerofattorney implements Serializable {
 
-    private static final long serialVersionUID =435460463L;
+    private static final long serialVersionUID =1260817908L;
     private Date attorney_date_finish;
     private Date attorney_date_start;
     private String attorney_number;
@@ -122,7 +122,7 @@ public class Powerofattorney implements Serializable {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "id", columnDefinition = "BIGINT", nullable = false)
     public Long getId() {
         return id;

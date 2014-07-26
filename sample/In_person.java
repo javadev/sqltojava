@@ -50,7 +50,7 @@ import sample.validator.*;
 @Table(name = "in_person")
 public class In_person implements Serializable {
 
-    private static final long serialVersionUID =797761486L;
+    private static final long serialVersionUID =-450359601L;
     private String another_employers;
     private String birth_place;
     private Date birthday;
@@ -647,8 +647,7 @@ public class In_person implements Serializable {
         this.gross_income = gross_income;
     }
 
-    @NotNull
-    @Year(min = "1950")
+    @NotNull 
     @Column(name = "habit_situation_start_date", columnDefinition = "DATE")
     public Date getHabit_situation_start_date() {
         return habit_situation_start_date;
@@ -668,7 +667,7 @@ public class In_person implements Serializable {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "id", columnDefinition = "BIGINT", nullable = false)
     public Long getId() {
         return id;

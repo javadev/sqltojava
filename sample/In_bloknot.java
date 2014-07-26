@@ -50,7 +50,7 @@ import sample.validator.*;
 @Table(name = "in_bloknot")
 public class In_bloknot implements Serializable {
 
-    private static final long serialVersionUID =-774981958L;
+    private static final long serialVersionUID =-1239107563L;
     private String bloknot_subtype;
     private String bloknot_type;
     private Date enter_date;
@@ -91,7 +91,7 @@ public class In_bloknot implements Serializable {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "id", columnDefinition = "BIGINT", nullable = false)
     public Long getId() {
         return id;

@@ -50,7 +50,7 @@ import sample.validator.*;
 @Table(name = "user")
 public class User implements Serializable {
 
-    private static final long serialVersionUID =-2139478778L;
+    private static final long serialVersionUID =-1483564191L;
     private Date activated;
     private Boolean blocked;
     private String blocked_comment;
@@ -181,7 +181,7 @@ public class User implements Serializable {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "id", columnDefinition = "BIGINT", nullable = false)
     public Long getId() {
         return id;

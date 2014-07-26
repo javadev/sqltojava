@@ -50,7 +50,7 @@ import sample.validator.*;
 @Table(name = "in_good")
 public class In_good implements Serializable {
 
-    private static final long serialVersionUID =1956996458L;
+    private static final long serialVersionUID =-172203241L;
     private String car_body_number;
     private String car_bundling_type;
     private Date car_delivery_date;
@@ -124,7 +124,8 @@ public class In_good implements Serializable {
     }
 
     @NotNull
-    @IssueYear
+    @Min(value = 1950)
+    @Max(value = 2012)
     @Column(name = "car_issue_year", columnDefinition = "INT")
     public Integer getCar_issue_year() {
         return car_issue_year;
@@ -200,7 +201,7 @@ public class In_good implements Serializable {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "id", columnDefinition = "BIGINT", nullable = false)
     public Long getId() {
         return id;
@@ -240,7 +241,6 @@ public class In_good implements Serializable {
     }
 
     @NotNull
-    @Check(min = 10000, max = 500000)
     @Column(name = "price", columnDefinition = "DECIMAL(9,2)")
     public BigDecimal getPrice() {
         return price;
