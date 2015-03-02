@@ -92,7 +92,6 @@ public class JavaGenerator {
     /**
      * By default, return a <code>SystemStreamLog</code> logger.
      *
-     * @see org.apache.maven.plugin.Mojo#getLog()
      * @return the logger
      */
     public Logger getLog() {
