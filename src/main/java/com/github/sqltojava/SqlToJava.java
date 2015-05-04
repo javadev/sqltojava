@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 Valentyn Kolesnikov
+ * Copyright 2015 Valentyn Kolesnikov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
  */
 package com.github.sqltojava;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -54,16 +55,22 @@ public class SqlToJava {
      * Main method.
      * @param args source.sql outpackage
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         if (args.length < 3) {
             Logger.getLogger(SqlToJava.class.getName()).log(Level.INFO,
-                    "SQL to java convertor. Copyright (c) 2012 (javadev75@gmail.com)\n"
-                    + "Usage: SqlToJava source.sql basedir outpackage");
+                    "SQL to java convertor.\n"
+                    + "Usage: SqlToJava source.sql basedir outpackage aliases");
             return;
         }
         String sqlFiles = args[0].trim();
         String basedir = args[1].trim();
         String outPackage = args[2].trim();
+        final String[] aliases;
+        if (args.length >= 4) {
+            aliases = args[3].trim().split(",");
+        } else {
+            aliases = new String[] {};
+        }
         Logger.getLogger(SqlToJava.class.getName()).log(Level.INFO, "sql files: " + sqlFiles);
         Logger.getLogger(SqlToJava.class.getName()).log(Level.INFO, "basedir: " + basedir);
         Logger.getLogger(SqlToJava.class.getName()).log(Level.INFO, "outPackage: " + outPackage);
@@ -81,7 +88,7 @@ public class SqlToJava {
         for (String file : cmdArgs) {
             fileLocations.add(file.trim());
         }
-        new JavaGenerator(basedir, fileLocations, outPackage).generate();
+        new JavaGenerator(basedir, fileLocations, outPackage, aliases).generate();
 
         Logger.getLogger(SqlToJava.class.getName()).log(Level.INFO, outPackage + " generated.");
     }

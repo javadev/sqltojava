@@ -44,12 +44,13 @@ public class JavaGeneratorTest {
         String basedir = "target";
         List<String> files = Arrays.asList("src/test/resources/test.sql");
         String outPackage = "out";
-        generator = new JavaGenerator(basedir, files, outPackage);
+        String[] aliases = new String[] {"credittype_has_externaldistributor:credittype_has_extdistributor"};
+        generator = new JavaGenerator(basedir, files, outPackage, aliases);
     }
 
     @Test
     public void generate() throws Exception {
-        final InputStream bookingInputStream = JavaGeneratorTest.class.getClassLoader().getResourceAsStream("Booking.java");
+        final InputStream bookingInputStream = JavaGeneratorTest.class.getClassLoader().getResourceAsStream("In_person.java");
         final BufferedReader bookingReader = new BufferedReader(new InputStreamReader(bookingInputStream));
         final List<String> bookingLines = new ArrayList<String>();
         try {
@@ -62,7 +63,7 @@ public class JavaGeneratorTest {
             bookingReader.close();
         }
         generator.generate();
-        final BufferedReader resultreader = new BufferedReader(new InputStreamReader(new FileInputStream("target/out/Booking.java")));
+        final BufferedReader resultreader = new BufferedReader(new InputStreamReader(new FileInputStream("target/out/In_person.java")));
         final List<String> resultLines = new ArrayList<String>();
         try {
             String line = resultreader.readLine();

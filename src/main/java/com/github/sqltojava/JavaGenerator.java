@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2014 Valentyn Kolesnikov
+ * Copyright 2015 Valentyn Kolesnikov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,11 +82,11 @@ public class JavaGenerator {
      * @param files the files
      * @param outPackage the out package
      */
-    public JavaGenerator(String basedir, List<String> files, String outPackage) {
+    public JavaGenerator(String basedir, List<String> files, String outPackage, String[] aliases) {
         this.basedir = basedir;
         this.files = files;
         this.outPackage = outPackage;
-        this.aliases = new String[0];
+        this.aliases = aliases;
     }
 
     /**
@@ -104,7 +104,7 @@ public class JavaGenerator {
     /**
      * Generates java files.
      */
-    public void generate() {
+    public void generate() throws IOException {
         readLines();
         scanTables();
         scanColumns();
@@ -113,9 +113,8 @@ public class JavaGenerator {
         generateJava();
     }
 
-    private void readLines() {
+    private void readLines() throws IOException {
         lines = new ArrayList<String>();
-        try {
         for (String fileName : files) {
 getLog().log(Level.INFO, "read file - " + fileName);
             BufferedReader input =  new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "UTF-8"));
@@ -130,9 +129,6 @@ getLog().log(Level.INFO, "read file - " + fileName);
             } finally {
                 input.close();
             }
-        }
-        } catch (IOException ex) {
-            getLog().log(Level.WARNING, ex.getMessage(), ex);
         }
     }
 
@@ -323,7 +319,7 @@ getLog().log(Level.INFO, "Generate tables: " + getKeys(tables));
         return true;
     }
 
-    private void generateJava() {
+    private void generateJava() throws IOException {
         Properties p = new Properties();
         p.setProperty("resource.loader", "string");
         p.setProperty("resource.loader.class", "org.apache.velocity.runtime.resource.loader.StringResourceLoader");
@@ -341,17 +337,13 @@ getLog().log(Level.INFO, "Generate tables: " + getKeys(tables));
             context.put("tableName", tableName.replaceFirst("(^.*?)@(.*)", "$2"));
             context.put("columns", columns.get(tableName));
             context.put("outPackage", outPackage);
-            try {
-                String outDirs = basedir + "/" + outPackage.replaceAll("\\.", "/");
-                new File(outDirs).mkdirs();
-                Writer writer = new OutputStreamWriter(new FileOutputStream(outDirs + "/"
-                        + className + ".java"), "utf-8");
-                template.merge(context, writer);
-                writer.flush();
-                writer.close();
-            } catch (IOException ex) {
-                getLog().log(Level.WARNING, ex.getMessage(), ex);
-            }
+            String outDirs = basedir + "/" + outPackage.replaceAll("\\.", "/");
+            new File(outDirs).mkdirs();
+            Writer writer = new OutputStreamWriter(new FileOutputStream(outDirs + "/"
+                    + className + ".java"), "utf-8");
+            template.merge(context, writer);
+            writer.flush();
+            writer.close();
         }
     }
 
@@ -361,7 +353,7 @@ getLog().log(Level.INFO, "Generate tables: " + getKeys(tables));
      * @param templatePath
      * @return
      */
-    private Template getTemplate(final String templatePath) {
+    private Template getTemplate(final String templatePath) throws IOException {
         if (!Velocity.resourceExists(templatePath)) {
             StringResourceRepository repo = StringResourceLoader.getRepository();
             repo.putStringResource(templatePath, getTemplateFromResource(templatePath));
@@ -375,13 +367,9 @@ getLog().log(Level.INFO, "Generate tables: " + getKeys(tables));
      * @param templatePath
      * @return
      */
-    private String getTemplateFromResource(final String templatePath) {
-        try {
-            InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(templatePath);
-            return IOUtils.toString(stream, "UTF-8");
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+    private String getTemplateFromResource(final String templatePath) throws IOException {
+        InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(templatePath);
+        return IOUtils.toString(stream, "UTF-8");
     }
 
     private <T, E> Set<T> getKeys(Map<T, E> map) {
