@@ -109,12 +109,9 @@
           </instrumentation>
         </configuration>
       </plugin>
-      <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-site-plugin</artifactId>
-          <version>3.6</version>
-          <configuration>
-            <reportPlugins>
+    </plugins>
+  </build>
+  <reporting>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>cobertura-maven-plugin</artifactId>
@@ -164,11 +161,7 @@
         <artifactId>taglist-maven-plugin</artifactId>
         <version>2.0</version>
       </plugin>
-            </reportPlugins>
-          </configuration>
-        </plugin>
-    </plugins>
-  </build>
+  </reporting>
   <dependencies>
 <dependency>
     <groupId>org.apache.velocity</groupId>
@@ -183,7 +176,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.13.1</version>
+      <version>4.13.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
